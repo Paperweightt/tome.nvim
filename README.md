@@ -1,5 +1,7 @@
 ### tome.nvim
 
+> NOT FOR USE | INCOMPLETE
+
 Zettelkasten | the best way to save notes
 Tome | the best way write notes
 
@@ -15,20 +17,18 @@ I want to write and edit first, organize automaticly, search later.
 
 Keep everything in one file (a study session) and split the file into more files upon save for a traditional Zettelkasten.
 
-## Fixes
-
-What if you want to work on a note that already exists?
+- What if you want to work on a note that already exists?
 
 Use autocomplete to add the note into your session file and on save it will replaces the page file and as well as any duplicates of it in other session files.
 
-What happens if you delete a page?
+- What happens if you delete a page?
 
-If a page is deleted from a page file all copies of it will be removed from the session files.
-If a page is deleted from a session file nothing will happen.
+All copies of it will be removed from session files.
+When a page is deleted from a session file nothing will happen.
 
 ---
 
-# Examples <!-- id -->
+# Examples
 
 ## Filetree
 
@@ -68,7 +68,7 @@ date: 2025-08-31
 last-edit: 2025-08-31
 tags: [algorithms, cs]
 ---
-# Graph Theory
+# Graph Theory <!-- id:1 -->
 
 DFS vs BFS comparison...
 ```
