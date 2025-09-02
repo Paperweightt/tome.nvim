@@ -9,13 +9,13 @@ M.get_pages = function()
 
   for _, file in ipairs(scan) do
     local lines = vim.fn.readfile(file)
-    -- local title = lines[1]:gsub("^#%s*", "") -- assumes first line is "# Title"
-    -- local id = nil
+    local id = lines[1]:match("<!%-%-id:(.-)%-%->")
+    local title = lines[1]:match("^(.-) <!--")
 
     table.insert(page, {
       lines = lines,
-      title = lines[1]
-      -- id = ,
+      title = title,
+      id = id,
       -- last_edit=,
       -- date=
     })

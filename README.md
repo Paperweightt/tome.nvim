@@ -5,7 +5,7 @@
 Zettelkasten | the best way to save notes
 Tome | the best way write notes
 
-# The Concept
+## The Concept
 
 A Zettelkasten is the perfect way to keep notes, it keeps ideas seperated and linked. When writing notes however, I like to keep all the relevant topics of the study session in one file. This allows me to write and expand ideas side by side. When studying networking I don't want to move from file to file expanding upon topics. I want everything in one place.
 
@@ -52,7 +52,11 @@ Quick notes on bubble sort...
 
 # Hash Tables
 
+---
+
 Key points from today's lecture...
+
+---
 
 # Graph Theory
 
@@ -68,6 +72,7 @@ date: 2025-08-31
 last-edit: 2025-08-31
 tags: [algorithms, cs]
 ---
+
 # Graph Theory <!-- id:1 -->
 
 DFS vs BFS comparison...

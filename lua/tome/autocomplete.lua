@@ -74,9 +74,9 @@ M.add_snippets = function()
   for _, page in pairs(pages) do
     ls.add_snippets("markdown", {
       s({
-        trig = page.title,
+        trig = page.title .. " " .. page.id,
         snippetType = "autosnippet",
-        docstring = "hi hello there"
+        -- docstring = "hi hello there"
       }, {
         f(input_page(page))
       }),
