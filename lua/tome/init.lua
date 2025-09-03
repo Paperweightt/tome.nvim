@@ -6,6 +6,15 @@ vim.api.nvim_create_user_command("Tome PrintPages", function()
   vim.print(pages.get_pages())
 end, {})
 
+vim.api.nvim_create_user_command("Tome Test", function()
+  pages.new_page("test", {
+    "hi",
+    "this is a test",
+    "hellooo"
+  })
+end, {})
+
+
 vim.api.nvim_create_user_command("Tome AddSnippets", function()
   snippets.refresh()
 end, {})
