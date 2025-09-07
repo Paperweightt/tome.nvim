@@ -44,16 +44,24 @@ M.parse_body = function(body)
   }
 end
 
+local id
+
 M.get_next_id = function()
   local timestamp = os.date("%Y-%m-%d")
   local highest_id = 0
 
   local scan = vim.fn.glob("~/Notes/tome/pages/*.md", false, true)
 
-  for _, file_name in ipairs(scan) do
-    local id = file_name:match("-(%d+)%.md$")
+  if id == nil then
+    for _, file_name in ipairs(scan) do
+      local file_id = file_name:match("-(%d+)%.md$")
 
-    highest_id = math.max(highest_id, id)
+      highest_id = math.max(highest_id, file_id)
+    end
+    id = highest_id
+  else
+    id = id + 1
+    highest_id = id
   end
 
   return timestamp .. "-" .. highest_id + 1
@@ -77,9 +85,9 @@ M.new_page = function(lines)
   file:close()
 end
 
+-- TODO: sync with buffers (if a page buffer is already opened it should be reopened)
 M.edit_page = function(id, lines)
   local path = M.get_filepath(id)
-  vim.print(path)
 
   if path == nil then
     vim.notify("Error editing file does not exist: " .. path, vim.log.levels.ERROR)
@@ -91,14 +99,6 @@ M.edit_page = function(id, lines)
   local new_page = M.parse_body(lines)
 
 
-  if old_page.title ~= new_page.title then
-    vim.print("title changed")
-    local filename = new_page.title:sub(3) .. "__" .. id .. ".md"
-
-    path = vim.fn.fnamemodify(path, ":h") .. "/" .. filename
-    -- vim.print(vim.fn.fnamemodify(path, ":h") .. "/" .. filename)
-  end
-
   local file, err = io.open(path, "w")
   if not file then
     vim.notify("Error creating file: " .. err, vim.log.levels.ERROR)
@@ -108,6 +108,18 @@ M.edit_page = function(id, lines)
   file:write(table.concat(lines, "\n"))
 
   file:close()
+
+  if old_page.title ~= new_page.title then
+    vim.print("title changed")
+    -- TODO: check if this works in linux
+    local filename = new_page.title:sub(3) .. "__" .. id .. ".md"
+    local new_path = vim.fn.fnamemodify(path, ":h") .. "/" .. filename
+    local success, err_message = os.rename(path, new_path)
+
+    if not success then
+      vim.notify("Error renaming file: " .. err_message, vim.log.levels.ERROR)
+    end
+  end
 end
 
 M.get_filepath = function(id)
@@ -122,14 +134,5 @@ M.get_filepath = function(id)
 
   return nil
 end
-
-M.edit_page("2025-09-03-4", {
-  "# whaterest2 <!--2025-09-03-4-->",
-  "",
-  "there",
-  "was",
-  "a",
-  "change"
-})
 
 return M

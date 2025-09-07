@@ -1,5 +1,7 @@
 local M = {}
 local parse_note = require("tome.pages").parse_body
+local edit_page = require("tome.pages").edit_page
+local new_page = require("tome.pages").new_page
 
 function M.parse_file(filepath)
   filepath = vim.fn.expand(filepath)
@@ -50,7 +52,6 @@ function M.split_session(lines)
     if found_first_page == false then
       if line:match("^# ") then
         start = i
-        vim.print("start: " .. i)
       else
         found_first_page = true
       end
@@ -74,7 +75,46 @@ function M.split_session(lines)
   return pages
 end
 
-vim.print(M.parse_file("~/Notes/tome/sessions/https.md"))
+function M.add_missing_ids(filepath)
+  filepath = vim.fn.expand(filepath)
+
+  local file, err = io.open(filepath, "r+")
+
+  if not file then
+    vim.notify("Error reading file: " .. err, vim.log.levels.ERROR)
+    return
+  end
+
+  local lines = {}
+  for line in file:lines() do
+    local title = line:match("^(.-) <!--")
+    if title ~= nil then
+      line = "hi" -- replace line if it matches
+    end
+    table.insert(lines, line)
+  end
+
+  file:seek("set", 0)
+
+  file:write(table.concat(lines, "\n"))
+end
+
+function M.save_session(filepath)
+  local pages = M.parse_file(filepath)
+
+  if not pages then
+    vim.print("error")
+    return
+  end
+
+  for _, page in pairs(pages) do
+    if page.id == nil then
+      new_page(page.lines)
+    else
+      edit_page(page.id, page.lines)
+    end
+  end
+end
 
 function M.find_page(session_filepath, page_id)
 
