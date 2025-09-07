@@ -1,7 +1,7 @@
 local M = {}
 local parse_note = require("tome.pages").parse_body
 local edit_page = require("tome.pages").edit_page
-local new_page = require("tome.pages").new_page
+local get_id = require("tome.pages").get_next_id
 
 function M.parse_file(filepath)
   filepath = vim.fn.expand(filepath)
@@ -75,44 +75,30 @@ function M.split_session(lines)
   return pages
 end
 
-function M.add_missing_ids(filepath)
-  filepath = vim.fn.expand(filepath)
+function M.add_ids_to_bufr(bufnr)
+  local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
-  local file, err = io.open(filepath, "r+")
+  for i, line in ipairs(lines) do
+    local has_id = line:match("^# (.-) <!%-%-(.-)%-%->$")
+    local has_title = line:match("^# (.-)$")
 
-  if not file then
-    vim.notify("Error reading file: " .. err, vim.log.levels.ERROR)
-    return
-  end
-
-  local lines = {}
-  for line in file:lines() do
-    local title = line:match("^(.-) <!--")
-    if title ~= nil then
-      line = "hi" -- replace line if it matches
+    if has_title and not has_id then
+      lines[i] = line .. " <!--" .. get_id() .. "-->"
     end
-    table.insert(lines, line)
   end
 
-  file:seek("set", 0)
-
-  file:write(table.concat(lines, "\n"))
+  vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 end
 
 function M.save_session(filepath)
   local pages = M.parse_file(filepath)
 
   if not pages then
-    vim.print("error")
     return
   end
 
   for _, page in pairs(pages) do
-    if page.id == nil then
-      new_page(page.lines)
-    else
-      edit_page(page.id, page.lines)
-    end
+    edit_page(page.id, page.lines)
   end
 end
 

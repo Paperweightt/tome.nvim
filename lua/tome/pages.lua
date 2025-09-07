@@ -34,7 +34,7 @@ M.parse_header = function(header)
 end
 
 M.parse_body = function(body)
-  local id = body[1]:match("<!%-%-id:(.-)%-%->")
+  local id = body[1]:match("<!%-%-(.-)%-%->")
   local title = body[1]:match("^(.-) <!--")
 
   return {
@@ -48,7 +48,7 @@ local id
 
 M.get_next_id = function()
   local timestamp = os.date("%Y-%m-%d")
-  local highest_id = 0
+  local new_id = 0
 
   local scan = vim.fn.glob("~/Notes/tome/pages/*.md", false, true)
 
@@ -56,23 +56,27 @@ M.get_next_id = function()
     for _, file_name in ipairs(scan) do
       local file_id = file_name:match("-(%d+)%.md$")
 
-      highest_id = math.max(highest_id, file_id)
+      new_id = math.max(new_id, file_id)
     end
-    id = highest_id
+    id = new_id + 1
   else
     id = id + 1
-    highest_id = id
+    new_id = id
   end
 
-  return timestamp .. "-" .. highest_id + 1
+  return timestamp .. "-" .. new_id
 end
 
 M.new_page = function(lines)
-  local id = M.get_next_id()
-  local filename = lines[1]:sub(3) .. "__" .. id .. ".md"
-  local path = vim.fn.expand("~/Notes/tome/pages/" .. filename)
+  -- vim.print("new page: " .. lines[1])
+  local page = M.parse_body(lines)
 
-  lines[1] = lines[1] .. " <!--" .. id .. "-->"
+  vim.print("hi" .. page.title:sub(3))
+
+  local filename = page.title:sub(3) .. "__" .. page.id .. ".md"
+
+  vim.print("filename" .. filename)
+  local path = vim.fn.expand("~/Notes/tome/pages/" .. filename)
 
   local file, err = io.open(path, "w")
   if not file then
@@ -81,7 +85,6 @@ M.new_page = function(lines)
   end
 
   file:write(table.concat(lines, "\n"))
-
   file:close()
 end
 
@@ -90,14 +93,15 @@ M.edit_page = function(id, lines)
   local path = M.get_filepath(id)
 
   if path == nil then
-    vim.notify("Error editing file does not exist: " .. path, vim.log.levels.ERROR)
+    M.new_page(lines)
     return
   end
+
+  vim.print("edit page: " .. lines[1])
 
   local old_lines = vim.fn.readfile(path)
   local old_page = M.parse_body(old_lines)
   local new_page = M.parse_body(lines)
-
 
   local file, err = io.open(path, "w")
   if not file then
@@ -126,7 +130,6 @@ M.get_filepath = function(id)
   local scan = vim.fn.glob("~/Notes/tome/pages/*.md", false, true)
 
   for _, file_name in ipairs(scan) do
-    vim.print(file_name:match("__(.-)%.md$"))
     if id == file_name:match("__(.-)%.md$") then
       return file_name
     end

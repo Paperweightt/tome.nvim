@@ -15,7 +15,6 @@ local function buf_needs_pre_divider(bufnr)
     local line = lines[i]
 
     if not line:match("^$") then
-      vim.print(line)
       return not line:match('^---')
     end
   end
