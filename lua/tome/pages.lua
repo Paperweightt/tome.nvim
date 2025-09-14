@@ -1,21 +1,21 @@
 local M = {}
 
 M.get_pages = function()
-  local page = {}
+  local pages = {}
 
   -- TODO: fix with adjustable path
   local scan = vim.fn.glob("~/Notes/tome/pages/*.md", false, true)
 
   for _, file in ipairs(scan) do
     local lines = vim.fn.readfile(file)
-    local id = lines[1]:match("<!%-%-id:(.-)%-%->")
+    local id = lines[1]:match("<!%-%-(.-)%-%->")
     local title = lines[1]:match("^(.-) <!--")
 
     if not id then
       goto next_iteration
     end
 
-    table.insert(page, {
+    table.insert(pages, {
       lines = lines,
       title = title,
       id = id,
@@ -26,7 +26,9 @@ M.get_pages = function()
     ::next_iteration::
   end
 
-  return page
+  vim.print(#pages .. " pages")
+
+  return pages
 end
 
 M.parse_header = function(header)

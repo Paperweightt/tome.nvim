@@ -28,7 +28,7 @@ When a page is deleted from a session file nothing will happen.
 
 ---
 
-# Examples
+# Examples <!--2025-09-07-372-->
 
 ## Filetree
 
@@ -46,21 +46,22 @@ notes/
 ## Session File
 
 ```DSA.md
-# Sorting Algorithms
+# Graph Theory <!--2025-09-05-1-->
 
-Quick notes on bubble sort...
-
-# Hash Tables
+DFS vs BFS comparison...
 
 ---
+
+# Hash Tables <!--2025-09-05-2-->
+
 
 Key points from today's lecture...
 
 ---
 
-# Graph Theory
+# Sorting Algorithms <!--2025-09-05-3-->
 
-DFS vs BFS comparison...
+Quick notes on bubble sort...
 ```
 
 ## Page File
@@ -73,7 +74,7 @@ last-edit: 2025-08-31
 tags: [algorithms, cs]
 ---
 
-# Graph Theory <!-- id:1 -->
+# Graph Theory <!--2025-09-05-1-->
 
 DFS vs BFS comparison...
 ```
