@@ -26,8 +26,6 @@ M.get_pages = function()
     ::next_iteration::
   end
 
-  vim.print(#pages .. " pages")
-
   return pages
 end
 
@@ -70,14 +68,8 @@ M.get_next_id = function()
 end
 
 M.new_page = function(lines)
-  -- vim.print("new page: " .. lines[1])
   local page = M.parse_body(lines)
-
-  vim.print("hi" .. page.title:sub(3))
-
   local filename = page.title:sub(3) .. "__" .. page.id .. ".md"
-
-  vim.print("filename" .. filename)
   local path = vim.fn.expand("~/Notes/tome/pages/" .. filename)
 
   local file, err = io.open(path, "w")
@@ -112,6 +104,7 @@ M.edit_page = function(id, lines)
 
   if path == nil then
     M.new_page(lines)
+    vim.print("new page: " .. lines[1])
     return
   end
 
@@ -137,7 +130,6 @@ M.edit_page = function(id, lines)
   file:close()
 
   if old_page.title ~= new_page.title then
-    vim.print("title changed")
     -- TODO: check if this works in linux
     local filename = new_page.title:sub(3) .. "__" .. id .. ".md"
     local new_path = vim.fn.fnamemodify(path, ":h") .. "/" .. filename
