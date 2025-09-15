@@ -1,6 +1,7 @@
 local M = {}
 
 M.defaults = {
+  "~/Notes/tome/"
 }
 
 M.options = {}

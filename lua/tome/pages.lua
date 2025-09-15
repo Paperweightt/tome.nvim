@@ -90,6 +90,22 @@ M.new_page = function(lines)
   file:close()
 end
 
+local function arrays_equal(a, b)
+  -- Different lengths? Not equal
+  if #a ~= #b then
+    return false
+  end
+
+  -- Compare element by element
+  for i = 1, #a do
+    if a[i] ~= b[i] then
+      return false
+    end
+  end
+
+  return true
+end
+
 -- TODO: sync with buffers (if a page buffer is already opened it should be reopened)
 M.edit_page = function(id, lines)
   local path = M.get_filepath(id)
@@ -99,9 +115,14 @@ M.edit_page = function(id, lines)
     return
   end
 
+  local old_lines = vim.fn.readfile(path)
+
+  if arrays_equal(old_lines, lines) then
+    return
+  end
+
   vim.print("edit page: " .. lines[1])
 
-  local old_lines = vim.fn.readfile(path)
   local old_page = M.parse_body(old_lines)
   local new_page = M.parse_body(lines)
 

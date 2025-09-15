@@ -75,7 +75,7 @@ function M.split_session(lines)
   return pages
 end
 
-function M.add_ids_to_bufr(bufnr)
+function M.add_missing_ids(bufnr)
   local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
 
   for i, line in ipairs(lines) do
@@ -90,8 +90,9 @@ function M.add_ids_to_bufr(bufnr)
   vim.api.nvim_buf_set_lines(bufnr, 0, -1, false, lines)
 end
 
-function M.save_session(filepath)
-  local pages = M.parse_file(filepath)
+function M.save_session(bufnr)
+  local buf_name = vim.api.nvim_buf_get_name(bufnr)
+  local pages = M.parse_file(buf_name)
 
   if not pages then
     return
@@ -103,7 +104,7 @@ function M.save_session(filepath)
 end
 
 function M.find_page(session_filepath, page_id)
-
+  return { start = 1, _end = 1 }
 end
 
 return M
