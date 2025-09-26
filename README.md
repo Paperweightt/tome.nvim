@@ -19,11 +19,11 @@ Keep everything in one file (a study session) and split the file into more files
 
 - What if you want to work on a note that already exists?
 
-Use autocomplete to add the note into your session file and on save it will replaces the page file and as well as any duplicates of it in other session files.
+Use autocomplete to add the note into your session file and on save it will sync with all other copies of it.
 
 - What happens if you delete a page?
 
-All copies of it will be removed from session files.
+A pending deletion tag gets added to each copy in the session files.
 When a page is deleted from a session file nothing will happen.
 
 ---

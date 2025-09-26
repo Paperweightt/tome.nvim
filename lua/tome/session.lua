@@ -58,9 +58,13 @@ function M.split_session(lines)
       goto next_iteration
     end
 
-    if line:match("^# ") or i == #lines then
+    if line:match("^# ") then
       add_page(start, _end)
       start = i
+    end
+
+    if i == #lines then
+      add_page(start, _end + 1)
     end
 
     if line:match("^$") or line:match("^%-%-%-") then

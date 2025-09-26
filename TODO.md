@@ -1,0 +1,26 @@
+## TODO
+
+- [ ] edit page through session
+  - [x] autoformat to add id ([BUGGED])
+  - [x] edit title and file name
+  - [x] edit body
+  - [x] propogate change to page ([optimization: file name lookup before loop])
+  - [ ] propogate change to other sessions
+- [ ] edit page
+  - [ ] deletion pending in session
+  - [ ] propogate changes to sessions
+- [x] autocomplete
+  - [x] blink.cmp
+  - [ ] nvim-cmp ([research required])
+- [ ] search notes
+  - [ ] telescope.nvim
+  - [ ] fzf.vim
+  - [ ] fff.nvim
+- [ ] metadata in pages
+  - [ ] date
+  - [ ] last edit
+  - [ ] references
+  - [ ] tags
+- [ ] relative links
+  - [ ] wikilink
+  - [ ] markdown
